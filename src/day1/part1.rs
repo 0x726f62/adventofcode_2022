@@ -1,7 +1,5 @@
 fn main() {
-
-
-    let input = std::fs::read_to_string("input.txt").unwrap();
+    let input = std::fs::read_to_string("src/day1/input/input.txt").unwrap();
 
     let mut global_max_sum: u32 = 0;
     let mut tmp_sum: u32 = 0;
