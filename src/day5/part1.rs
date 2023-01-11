@@ -69,6 +69,9 @@ fn main() {
             stack7.push(Crate::new(chars[25]));
         }
 
+
+        //just pad input with spaces for 1st line
+
         if !chars[29].is_ascii_whitespace() {
             stack8.push(Crate::new(chars[29]));
         }
@@ -76,27 +79,27 @@ fn main() {
         if !chars[33].is_ascii_whitespace() {
             stack9.push(Crate::new(chars[33]));
         }
-
-        stack1.reverse();
-        stack2.reverse();
-        stack3.reverse();
-        stack4.reverse();
-        stack5.reverse();
-        stack6.reverse();
-        stack7.reverse();
-        stack8.reverse();
-        stack9.reverse();
-
-        stacks.push(&mut stack1);
-        stacks.push(&mut stack2);
-        stacks.push(&mut stack3);
-        stacks.push(&mut stack4);
-        stacks.push(&mut stack5);
-        stacks.push(&mut stack6);
-        stacks.push(&mut stack7);
-        stacks.push(&mut stack8);
-        stacks.push(&mut stack9);
     }
+
+    stack1.reverse();
+    stack2.reverse();
+    stack3.reverse();
+    stack4.reverse();
+    stack5.reverse();
+    stack6.reverse();
+    stack7.reverse();
+    stack8.reverse();
+    stack9.reverse();
+
+    stacks.push(&mut stack1);
+    stacks.push(&mut stack2);
+    stacks.push(&mut stack3);
+    stacks.push(&mut stack4);
+    stacks.push(&mut stack5);
+    stacks.push(&mut stack6);
+    stacks.push(&mut stack7);
+    stacks.push(&mut stack8);
+    stacks.push(&mut stack9);
 
     // move 3 from 8 to 2
     for line in input.lines().skip(CRATES_LINES_INPUT + 2) {
@@ -106,7 +109,12 @@ fn main() {
         let to = splits[5].parse::<usize>().unwrap();
 
         for _ in 0..count {
-            stacks[to-1].push(stacks[from-1].pop().unwrap());
+            let item = stacks[from-1].pop().unwrap();
+            stacks[to-1].push(item);
         }
+    }
+
+    for stack in stacks {
+        print!("{}", stack.pop().unwrap().content);
     }
 }
