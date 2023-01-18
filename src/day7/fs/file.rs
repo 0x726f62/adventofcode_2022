@@ -1,17 +1,17 @@
 use super::FsItem;
 
-pub struct File {
-    name: &'static str,
+pub struct File<'a> {
+    name: &'a str,
     size: u32,
 }
 
-impl File {
-    pub fn new(name: &'static str, size: u32) -> Self {
+impl<'a> File<'a>  {
+    pub fn new(name: &'a str, size: u32) -> Self {
         Self { name, size }
     }
 }
 
-impl FsItem for File {
+impl<'a> FsItem for File<'a> {
     fn disk_usage(&self) -> u32{
         self.size
     }
