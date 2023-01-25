@@ -1,25 +1,25 @@
 use super::FsItem;
 
-pub struct File<'a> {
-    name: &'a str,
+pub struct File {
+    name: String,
     size: u32,
     depth: u32,
 }
 
-impl<'a> File<'a>  {
-    pub fn new(name: &'a str, size: u32, depth: u32) -> Self {
+impl File {
+    pub fn new(name: String, size: u32, depth: u32) -> Self {
         Self { name, size, depth }
     }
 }
 
-impl<'a> FsItem for File<'a> {
+impl<'a> FsItem for File {
     fn disk_usage(&self) -> u32{
         self.size
     }
 
-    fn find(&self, keyword: &str) -> Option<&dyn FsItem> {
+    fn find(self: &mut File, keyword: &str) -> Option<Box<&mut dyn FsItem>> {
         match self.name.eq(keyword) {
-            true => Some(self),
+            true => Some(Box::new(self)),
             false => None,
         }
     }
@@ -35,7 +35,7 @@ impl<'a> FsItem for File<'a> {
         self.depth
     }
 
-    // fn add(&mut self, fs_item: impl FsItem) {
-    //     panic!();
-    // }
+    fn add(&mut self, _fs_item: Box<dyn FsItem>) {
+        panic!();
+    }
 }

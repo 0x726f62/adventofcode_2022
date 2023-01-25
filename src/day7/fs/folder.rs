@@ -3,13 +3,13 @@ use super::FsItem;
 static PATH_SEP: &'static str = "/";
 
 pub struct Folder<'a> {
-    name: &'a str,
+    name: String,
     depth: u32,
     fs_items: Vec<Box<dyn FsItem + 'a>>,
 }
 
 impl<'a>  Folder<'a> {
-    pub fn new(name: &'a str, depth: u32) -> Self {
+    pub fn new(name: String, depth: u32) -> Self {
         Self {
             name,
             depth,
@@ -28,7 +28,7 @@ impl<'a> FsItem for Folder<'a> {
         sum
     }
 
-    fn find(&self, keyword: &str) -> Option<&dyn FsItem> {
+    fn find(self: &mut Folder<'a>, keyword: &str) -> Option<Box<&mut dyn FsItem>> {
         //take the first
         let splits: Vec<&str> = keyword.split(PATH_SEP).collect();
         // compare with name
@@ -37,7 +37,7 @@ impl<'a> FsItem for Folder<'a> {
             return None;
         } else if splits.len() == 1 {
             //also case to check a for folder existence
-            return Some(self);
+            return Some(Box::new(self));
         }
 
         //TODO refactor
@@ -46,7 +46,7 @@ impl<'a> FsItem for Folder<'a> {
             splits_without_first_level.push(splits[index]);
         }
 
-        for fs_item in self.fs_items.iter() {
+        for fs_item in self.fs_items.iter_mut() {
             match fs_item.find(&(splits_without_first_level.join(PATH_SEP))) {
                 //match found in sub tree
                 Some(x) => return Some(x),
@@ -72,7 +72,7 @@ impl<'a> FsItem for Folder<'a> {
         self.depth
     }
 
-    // fn add(&mut self, fs_item: impl FsItem + 'a) {
-    //     self.fs_items.push(Box::new(fs_item));
-    // }
+    fn add(&mut self, fs_item: Box<dyn FsItem + 'a>) {
+        self.fs_items.push(fs_item);
+    }
 }

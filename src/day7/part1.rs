@@ -7,7 +7,7 @@ fn main() {
     let input = std::fs::read_to_string("src/day7/input/input.txt").unwrap();
 
     let mut pwd = Vec::new();
-    let mut tree = Folder::new("/", 1);
+    let mut tree = Folder::new("/".to_string(), 1);
     pwd.push("/");
     let mut pwd_fsItem = tree.find("/").unwrap();
 
@@ -46,8 +46,7 @@ fn main() {
                 dir_path.push_str(dir_name);
                 match tree.find(&dir_path) {
                     None => {
-                        let depth = pwd_fsItem.depth();
-                        pwd_fsItem.add(Folder::new(dir_name, pwd_fsItem.depth() + 1));
+                        pwd_fsItem.add(Box::new(Folder::new(dir_name.to_string(), pwd_fsItem.depth() + 1)));
                     }
                     _ => (),
                 }
@@ -64,7 +63,7 @@ fn main() {
                 //   if not - create File with size and add it into struct
                 match tree.find(&file_path) {
                     None => {
-                        pwd_fsItem.add(File::new(file_name, file_size, pwd_fsItem.depth()+1));
+                        pwd_fsItem.add(Box::new(File::new(file_name.to_string(), file_size, pwd_fsItem.depth()+1)));
                     }
                     _ => (),
                 }
