@@ -2,13 +2,13 @@ use super::FsItem;
 
 static PATH_SEP: &'static str = "/";
 
-pub struct Folder<'a> {
+pub struct Folder {
     name: String,
     depth: u32,
-    fs_items: Vec<Box<dyn FsItem + 'a>>,
+    fs_items: Vec<Box<dyn FsItem>>,
 }
 
-impl<'a>  Folder<'a> {
+impl Folder {
     pub fn new(name: String, depth: u32) -> Self {
         Self {
             name,
@@ -18,7 +18,7 @@ impl<'a>  Folder<'a> {
     }
 }
 
-impl<'a> FsItem for Folder<'a> {
+impl FsItem for Folder {
     fn disk_usage(&self) -> u32 {
         let mut sum: u32 = 0;
         for fs_item in self.fs_items.iter() {
@@ -28,7 +28,7 @@ impl<'a> FsItem for Folder<'a> {
         sum
     }
 
-    fn find(self: &mut Folder<'a>, keyword: &str) -> Option<Box<&mut dyn FsItem>> {
+    fn find(&mut self, keyword: &str) -> Option<Box<&mut dyn FsItem>> {
         //take the first
         let splits: Vec<&str> = keyword.split(PATH_SEP).collect();
         // compare with name
@@ -72,7 +72,7 @@ impl<'a> FsItem for Folder<'a> {
         self.depth
     }
 
-    fn add(&mut self, fs_item: Box<dyn FsItem + 'a>) {
+    fn add(&mut self, fs_item: Box<dyn FsItem>) {
         self.fs_items.push(fs_item);
     }
 }

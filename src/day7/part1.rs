@@ -9,7 +9,6 @@ fn main() {
     let mut pwd = Vec::new();
     let mut tree = Folder::new("/".to_string(), 1);
     pwd.push("/");
-    let mut pwd_fsItem = tree.find("/").unwrap();
 
     for line in input.lines().skip(1) {
         //if cmd
@@ -25,12 +24,10 @@ fn main() {
                 if line.eq("$ cd ..") {
                     //   .. - pop from pwd
                     pwd.pop();
-                    pwd_fsItem = tree.find(&pwd.join("/")).unwrap();
                 } else {
                     //   x - push into pwd
                     let cd_splits: Vec<&str> = line.split(' ').collect();
                     pwd.push(cd_splits[2]);
-                    pwd_fsItem = tree.find(&pwd.join("/")).unwrap();
                 }
             }
 
@@ -46,6 +43,7 @@ fn main() {
                 dir_path.push_str(dir_name);
                 match tree.find(&dir_path) {
                     None => {
+                        let mut pwd_fsItem = tree.find(&pwd.join("/")).unwrap();
                         pwd_fsItem.add(Box::new(Folder::new(dir_name.to_string(), pwd_fsItem.depth() + 1)));
                     }
                     _ => (),
@@ -63,6 +61,7 @@ fn main() {
                 //   if not - create File with size and add it into struct
                 match tree.find(&file_path) {
                     None => {
+                        let mut pwd_fsItem = tree.find(&pwd.join("/")).unwrap();
                         pwd_fsItem.add(Box::new(File::new(file_name.to_string(), file_size, pwd_fsItem.depth()+1)));
                     }
                     _ => (),

@@ -12,12 +12,12 @@ impl File {
     }
 }
 
-impl<'a> FsItem for File {
+impl FsItem for File {
     fn disk_usage(&self) -> u32{
         self.size
     }
 
-    fn find(self: &mut File, keyword: &str) -> Option<Box<&mut dyn FsItem>> {
+    fn find(&mut self, keyword: &str) -> Option<Box<&mut dyn FsItem>> {
         match self.name.eq(keyword) {
             true => Some(Box::new(self)),
             false => None,
