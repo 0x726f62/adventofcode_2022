@@ -5,20 +5,19 @@ fn main() {
     let matrix_rows = matrix.len();
     let matrix_columns = matrix[0].len();
     let mut visible_trees = 0;
+    let visible_outer_trees = matrix_rows + matrix_rows + (matrix_columns - 2) + (matrix_columns - 2);
 
     println!("matrix_rows = {}", matrix_rows);
     println!("matrix_columns = {}", matrix_columns);
 
-    let visible_outer_trees = matrix_rows + matrix_rows + (matrix_columns - 1) + (matrix_columns - 1);
-
     for i in 1..matrix_rows-1 {
         let columns = &matrix[i];
         for j in 1..matrix_columns-1 {
-            let mut visible: bool = true;
             println!("matrix[{}][{}] = {}", i, j, columns[j]);
             //can compute quadrant and optimize search little bit
 
-            for p in j..0 {
+            let mut visible: bool = true;
+            for p in 0..j {
                 if columns[p] >= columns[j] {
                     visible = false;
                     break;
@@ -30,7 +29,8 @@ fn main() {
                 continue;
             }
 
-            for p in j..matrix_columns {
+            visible = true;
+            for p in (j+1)..matrix_columns {
                 if columns[p] >= columns[j] {
                     visible = false;
                     break;
@@ -41,7 +41,9 @@ fn main() {
                 visible_trees += 1;
                 continue;
             }
-            for p in i..0 {
+
+            visible = true;
+            for p in 0..i {
                 if matrix[p][j] >= columns[j] {
                     visible = false;
                     break;
@@ -52,7 +54,9 @@ fn main() {
                 visible_trees += 1;
                 continue;
             }
-            for p in i..matrix_rows {
+
+            visible = true;
+            for p in (i+1)..matrix_rows {
                 if matrix[p][j] >= columns[j] {
                     visible = false;
                     break;
